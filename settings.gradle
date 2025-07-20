@@ -1,0 +1,5 @@
+rootProject.name = 'moo'
+include 'moo-shared'
+include 'moo-app'
+include 'moo-core'
+

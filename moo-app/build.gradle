@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.kr.moo'
+version = '0.0.1-MOO'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    implementation project(':moo-shared')
+}
+
+test {
+    useJUnitPlatform()
+}
