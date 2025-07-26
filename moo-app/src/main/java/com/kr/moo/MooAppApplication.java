@@ -10,7 +10,6 @@ public class MooAppApplication {
     @PostConstruct
     public void init() {
         SharedTestClass.run();
-        CoreTestClass.run();
     }
 
     public static void main(String[] args) {

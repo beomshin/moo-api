@@ -1,0 +1,7 @@
+datasource:
+  instance1:
+    url:
+    driver-class-name:
+    username:
+    password:
+

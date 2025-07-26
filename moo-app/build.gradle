@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-//    implementation project(':moo-shared')
+
 }
 
 test {

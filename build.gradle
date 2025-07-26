@@ -45,10 +45,10 @@ subprojects {
 
 }
 
-project(':moo-app') { // 컴파일 시 moo-shared 로딩
+project(':moo-app') {
     dependencies {
         compileOnly project(':moo-shared')
-        compileOnly project(':moo-core')
+        implementation(project(':moo-core'))
     }
 }
 
