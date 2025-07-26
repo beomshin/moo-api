@@ -10,11 +10,7 @@ repositories {
 }
 
 dependencies {
-
-    // 2025.07.26 임시 H2 디비 설정
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    runtimeOnly 'com.h2database:h2'
-
+    implementation project(":moo-core")
 }
 
 test {

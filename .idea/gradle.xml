@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/moo-app" />
             <option value="$PROJECT_DIR$/moo-core" />
             <option value="$PROJECT_DIR$/moo-shared" />
+            <option value="$PROJECT_DIR$/moo-user-service" />
           </set>
         </option>
       </GradleProjectSettings>
