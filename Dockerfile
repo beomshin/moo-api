@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-jdk-alpine as builder
 
 WORKDIR /app
 
-# gradle 빌드 결과 복사 (또는 mvn 패키지 결과물 복사)
+# gradle 빌드 결과 복사
 COPY target/*.jar app.jar
 
 # 2단계: 실제 실행 이미지
