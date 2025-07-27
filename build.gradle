@@ -64,3 +64,9 @@ project(':moo-core') {
     bootJar { enabled = false }
     jar { enabled = true }
 }
+
+
+project(':moo-user-service') {
+    bootJar { enabled = false }
+    jar { enabled = true }
+}
