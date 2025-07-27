@@ -14,9 +14,9 @@ jobs:
     # 도커 정보 설정
     env:
       DOCKER_HUB_REPO: moo
-      DOCKER_HUB_NAME: ${{DOCKER_HUB_NAME}}
-      DOCKER_HUB_USER: ${{DOCKER_HUB_USER}}
-      DOCKER_HUB_PASSWORD: ${{DOCKER_HUB_PASSWORD}}
+      DOCKER_HUB_NAME: ${{secrets.DOCKER_HUB_NAME}}
+      DOCKER_HUB_USER: ${{secrets.DOCKER_HUB_USER}}
+      DOCKER_HUB_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
 
     permissions:
       contents: read
