@@ -1,7 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none  # ★ 시작 시 항상 테이블 새로 생성
+    show-sql: false # true 설정시 JPA 쿼리문 확인 가능
+    properties:
+      hibernate:
+        format_sql: false
+
 datasource:
   instance1:
-    url:
-    driver-class-name:
-    username:
-    password:
-
+    jdbc-url: jdbc:mysql://125.180.87.49:5221/moo_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: moo
+    password: moo@2025!
