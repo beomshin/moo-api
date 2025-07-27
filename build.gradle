@@ -10,8 +10,8 @@ repositories {
 bootJar.enabled = false
 
 allprojects {
-    group = 'com.kr.resv'
-    version = '0.0.1-RESV'
+    group = 'com.kr.moo'
+    version = '0.0.1'
 
     repositories {
         mavenCentral()
@@ -47,10 +47,12 @@ subprojects {
 }
 
 project(':moo-app') {
-    dependencies {
-        compileOnly project(':moo-shared')
-        compileOnly project(':moo-user-service')
+    bootJar { enabled = true }
+    jar { enabled = false }
 
+    dependencies {
+        implementation project(':moo-shared')
+        implementation project(':moo-user-service')
         implementation project(':moo-core')
     }
 }
@@ -69,4 +71,27 @@ project(':moo-core') {
 project(':moo-user-service') {
     bootJar { enabled = false }
     jar { enabled = true }
+}
+
+task copyBootJarToTarget(type: Copy) {
+    dependsOn ':moo-app:bootJar'
+
+    from(project(':moo-app').tasks.named('bootJar').map { it.archiveFile.get().asFile })
+    def versionTag = project.version.toString()
+
+    into("${rootProject.projectDir}/target")
+    rename { fileName ->
+        return "app-${versionTag}.jar"
+    }
+}
+
+task mooAppBootJar {
+    dependsOn clean, copyBootJarToTarget
+    group = "build"
+    description = "moo-app의 bootJar 빌드 및 복사"
+
+    doLast {
+        println("Moo App BootJar 복사 완료")
+        println("target 디렉토리에 JAR가 복사되었습니다.")
+    }
 }
