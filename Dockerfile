@@ -10,7 +10,7 @@ COPY target/*.jar app.jar
 FROM eclipse-temurin:21-jre-alpine
 
 # JVM 환경 설정 (옵션)
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0"
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0 -Xms256m -Xmx1024m"
 
 WORKDIR /app
 

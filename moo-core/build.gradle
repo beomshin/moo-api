@@ -15,6 +15,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     runtimeOnly 'com.h2database:h2'
 
+    // 2025.07.27 mysql connector 추가
     implementation 'com.mysql:mysql-connector-j:8.3.0'
 
 }
