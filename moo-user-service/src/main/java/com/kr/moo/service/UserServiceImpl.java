@@ -1,5 +1,7 @@
 package com.kr.moo.service;
 
+
+import com.kr.moo.SHA265Util;
 import com.kr.moo.enums.UserCreateResultType;
 import com.kr.moo.dto.request.UserCreateRequest;
 import com.kr.moo.persistence.entity.UserEntity;
@@ -37,13 +39,18 @@ public class UserServiceImpl implements UserService {
                 return UserCreateResultType.DUPLICATED_PHONE;
             }
 
+            // sha256 암호화 처리 , 정적(static)
+            byte[] salt = SHA265Util.getSalt();
+            String encrypedTel = SHA265Util.getEncryptText(req.getUserTel(), salt); // 전화번호 암호화
+            String encrypedPwd = SHA265Util.getEncryptText(req.getUserPwd(), salt); // 비밀번호 암호화
+
             // 2. 회원가입 처리
             // Entity로 재정의
             UserEntity user = UserEntity.builder()
                     .userName(req.getUserName())
-                    .userPwd(req.getUserPwd())
+                    .userPwd(encrypedPwd) // 비밀번호 sha256
                     .userBirth(req.getUserBirth())
-                    .userTel(req.getUserTel())
+                    .userTel(encrypedTel) // 전화번호 sha256
                     .userTelLast(req.getUserTelLast())
                     .userJoinAt(LocalDateTime.now().toString())
                     .userLoginType(UserLoginType.HOMEPAGE_CREATE)
