@@ -57,6 +57,17 @@ project(':moo-app') {
     }
 }
 
+
+project(':moo-admin') {
+    bootJar { enabled = true }
+    jar { enabled = false }
+
+    dependencies {
+        implementation project(':moo-shared')
+        implementation project(':moo-core')
+    }
+}
+
 project(':moo-shared') {
     bootJar { enabled = false }
     jar { enabled = true }
