@@ -13,3 +13,9 @@ INSERT INTO users (
       (8, '유재석', '01033334444', '4444', '8f14e45fceea167a5a36dedd4bea2543', '19780814', CURRENT_TIMESTAMP, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
       (9, '강호동', '01077778888', '8888', 'b2e98ad6f6eb8508dd6a14cfa704bad7', '19700630', CURRENT_TIMESTAMP, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
       (10, '서장훈', '01099990000', '0000', '45c48cce2e2d7fbdea1afc51c7c6ad26', '19740312', CURRENT_TIMESTAMP, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO stores (
+    store_name, boss_name, store_intro, store_tel, open_at, open_time, close_time, is_24h, store_no, store_addr,
+    store_addr_detail, sido, sigungu, eupmyeondong, postal_code, latitude, longitude, seat_count, seat_map_url, store_status)
+VALUES
+    ('moo', '홍길동', '든든한 한끼를 드립니다', '02-1234-5678', CURRENT_TIMESTAMP, CAST('09:00:00' AS TIME), CAST('22:00:00' AS TIME), 0, '123-45-67890', '서울특별시 강서구 공항대로 293', '지하 1층 105호', '서울특별시', '강서구', '등촌동', '07655', 37.558484, 126.861217, 24, 'https://example.com/seat-map.png', 0);

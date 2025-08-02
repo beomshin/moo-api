@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: moo-admin
+  profiles:
+    active: local
+    group:
+      local:
+        - console-logging
+        - file-logging
+      dev:
+        - console-logging
+      prod:
+        - console-logging
+        - file-logging
