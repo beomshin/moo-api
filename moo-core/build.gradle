@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.kr.moo'
-version = '0.0.1-MOO'
+version = '0.0.1'
 
 repositories {
     mavenCentral()
@@ -14,6 +14,9 @@ dependencies {
     // 2025.07.26 임시 H2 디비 설정
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     runtimeOnly 'com.h2database:h2'
+
+    // 2025.07.27 mysql connector 추가
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
 
 }
 

@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.kr.moo.persistence.repository")
 @EntityScan(basePackages = "com.kr.moo.persistence.entity")
-public class MooAppApplication {
+public class MooAdminApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MooAppApplication.class, args);
+        SpringApplication.run(MooAdminApplication.class, args);
     }
 }
