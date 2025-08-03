@@ -45,17 +45,17 @@ public class SeatEntity extends BaseEntity {
 
     @Column(name = "start_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-    private Timestamp start_at; // 좌석 이용 시작시간
+    private Timestamp startAt; // 좌석 이용 시작시간
 
     @Column(name = "expired_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-    private Timestamp expired_at; // 좌석 이용 종료시간
+    private Timestamp expiredAt; // 좌석 이용 종료시간
 
     @Column(name = "seat_type")
     @Convert(converter = SeatTypeConverter.class)
     private SeatType seatType; // 좌석 타입 (0: 일반석, 1: 고정석)
 
-    @Column(name = "store_status")
+    @Column(name = "seat_status")
     @Convert(converter = SeatStatusConverter.class)
-    private SeatStatus storeStatus; // 좌석 상태 (0: 이용가능, 1: 이용불가)
+    private SeatStatus seatStatus; // 좌석 상태 (0: 이용가능, 1: 이용불가)
 }
