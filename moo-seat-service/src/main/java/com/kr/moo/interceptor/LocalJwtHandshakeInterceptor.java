@@ -16,6 +16,7 @@ public class LocalJwtHandshakeInterceptor implements JwtHandshakeInterceptor {
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+        log.error("◆ 로컬 jwt 인터셉터 실행 강제 storeId 1 고정 세팅 ");
         attributes.put("storeId", 1);
         return true;
     }

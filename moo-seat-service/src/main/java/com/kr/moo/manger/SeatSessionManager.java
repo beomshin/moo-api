@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class SeatSessionManager {
 
+    // ConcurrentHashMap은 읽기 작업에는 여러 쓰레드가 동시에 읽을 수 있지만, 쓰기 작업에는 특정 세그먼트 or 버킷에 대한 Lock을 사용
     private final Set<WebSocketSession> socketSessions = ConcurrentHashMap.newKeySet();
 
     public void add(WebSocketSession session) {

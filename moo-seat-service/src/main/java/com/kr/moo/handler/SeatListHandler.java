@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,14 +24,25 @@ public class SeatListHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception { // 클라이언트와 WebSocket 연결이 맺어진 직후 호출
         seatSessionManager.add(session);
 
-        Long storeId = Long.valueOf(session.getAttributes().get("storeId").toString());
-        List<SeatDto> seats = seatService.findSeatsByStoreId(storeId);
+        try {
+            log.info("◆ 좌석 정보 조회 세션 접속 성공");
+            Long storeId = Long.valueOf(session.getAttributes().get("storeId").toString());
+            List<SeatDto> seats = seatService.findSeatsByStoreId(storeId);
 
-        String msg = new ObjectMapper().writeValueAsString(
-                Map.of("seats", seats)
-        );
+            String msg = new ObjectMapper().writeValueAsString(
+                    Map.of("seats", seats)
+            );
 
-        session.sendMessage(new TextMessage(msg));
+            log.info("◆ 좌석 정보 조회 응답 메세지 : [{}]", msg);
+            session.sendMessage(new TextMessage(msg));
+        } catch (Exception e) {
+            log.error("◆ 좌석 정보 조회 중 오류 발생 : ", e);
+            String msg = new ObjectMapper().writeValueAsString(
+                    Map.of("seats", new ArrayList<>())
+            );
+
+            session.sendMessage(new TextMessage(msg));
+        }
     }
 
     @Override

@@ -18,6 +18,7 @@ public class SeatServiceImpl implements SeatService {
 
     @Override
     public List<SeatDto> findSeatsByStoreId(Long storeId) {
+        log.info("◆ 매장 좌석 정보 조회 [DB] : {}", storeId);
         List<SeatEntity> seatEntities = seatRepository.findByStoreEntity_StoreId(storeId);
         return seatEntities.stream().map(SeatDto::new).toList();
     }
