@@ -2,6 +2,7 @@ package com.kr.moo.controller;
 
 import com.kr.moo.dto.SeatResult;
 import com.kr.moo.dto.res.ResponseReserveSeat;
+import com.kr.moo.exception.SeatException;
 import com.kr.moo.jwt.JwtPayload;
 import com.kr.moo.service.SeatService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class SeatController {
             @PathVariable Long seatId,
             @JwtPayload("userId") Long userId,
             @JwtPayload("storeId") Long storeId
-    ) { // 시트 예약
-        SeatResult seatResult = seatService.reserveSeat(userId, storeId , seatId);
+    ) throws SeatException { // 시트 예약
+        SeatResult seatResult = seatService.reserveSeat(1L, 1L , seatId);
         return ResponseEntity.ok().body(new ResponseReserveSeat(seatResult));
     }
 }
