@@ -10,4 +10,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * @return
      */
     boolean existsByUserTel(String userTel);
+
+    /**
+     * 휴대폰번호로 user객체 조회
+     * @param userTel
+     * @return
+     */
+    UserEntity findByUserTel(String userTel);
 }

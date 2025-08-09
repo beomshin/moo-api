@@ -32,7 +32,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "user_name")
     private String userName; // 사용자 이름
 
-    @Column(name = "user_tel", length = 128)
+    @Column(name = "user_tel", length = 128, nullable = false)
     private String userTel; // 전화번호 (암호화)
 
     @Column(name = "user_tel_last", length = 4)
