@@ -1,13 +1,12 @@
-package com.kr.moo;
+package com.kr.moo.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 public class SHA265Util {
 
     // SHA-256 해시 암호화 메서드
-    public static String getEncryptText (String text, byte[] salt) {
+    public static String getEncryptText (String text) {
         String encrptText = null;
 
         try {
@@ -15,7 +14,7 @@ public class SHA265Util {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
 
             // salt 적용 (무작위 바이트 데이터 추가 보안 강화하기 위해)
-            md.update(salt);
+//            md.update(salt);
 
             // 원본 텍스트를 byte[] 형태로 해시 처리
             byte[] bytes = md.digest(text.getBytes());
@@ -34,11 +33,11 @@ public class SHA265Util {
         return encrptText;
     }
 
-    public static byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        return salt;
-    }
+//    public static byte[] getSalt() throws NoSuchAlgorithmException {
+//        SecureRandom random = new SecureRandom();
+//        byte[] salt = new byte[16];
+//        random.nextBytes(salt);
+//        return salt;
+//    }
 
 }
