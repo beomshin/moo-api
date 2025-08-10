@@ -1,26 +1,18 @@
 package com.kr.moo.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kr.moo.constants.RedisKey;
 import com.kr.moo.dto.SeatResult;
-import com.kr.moo.dto.res.ResponseSeats;
-import com.kr.moo.dto.res.frame.ResponseSeat;
 import com.kr.moo.exception.SeatErrorCode;
 import com.kr.moo.exception.SeatException;
-import com.kr.moo.manger.SeatSessionManager;
 import com.kr.moo.persistence.entity.SeatEntity;
 import com.kr.moo.persistence.entity.enums.SeatStatus;
 import com.kr.moo.persistence.entity.enums.SeatType;
 import com.kr.moo.persistence.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -28,15 +20,8 @@ import java.util.List;
 public class SeatServiceImpl implements SeatService {
 
     private final SeatRepository seatRepository;
-    private final RedisTemplate<String, String> redisTemplate;
-    private final SeatSessionManager seatSessionManager;
-
-    @Override
-    public List<SeatResult> findSeatsByStoreId(Long storeId) {
-        log.info("◆ 매장 좌석 정보 조회 [DB] : {}", storeId);
-        List<SeatEntity> seatEntities = seatRepository.findByStoreEntity_StoreId(storeId);
-        return seatEntities.stream().map(SeatResult::new).toList();
-    }
+    private final SeatRedisService seatRedisService;
+    private final SeatSessionService seatSessionService;
 
     @Override
     @Transactional
@@ -56,16 +41,7 @@ public class SeatServiceImpl implements SeatService {
 
             // 동시성 제어
             log.info("◆ 좌석 상태 조회 [Redis] : [{}]", seatId);
-            boolean isReserved = Boolean.TRUE.equals(redisTemplate.execute((RedisCallback<Boolean>) conn -> {
-                if (Boolean.TRUE.equals(redisTemplate.opsForValue().getBit(RedisKey.getSeatKey(storeId), seatEntity.getSeatNumber()))) {
-                    // 레디스 비트맵 좌석 offset이 active 경우 예약 실패 처리
-                    return true;
-                }
-
-                // 비트맵 좌석이 non active로 active 처리
-                redisTemplate.opsForValue().setBit(RedisKey.getSeatKey(storeId), seatEntity.getSeatNumber(), true); // 레디스 좌석 active 처리
-                return false;
-            }));
+            boolean isReserved = seatRedisService.reserveSeat(storeId, seatEntity.getSeatNumber());
 
             if (isReserved) {
                 log.info("◆ 이미 사용중인 좌석 [Redis] : status [{}]", seatEntity.getSeatStatus());
@@ -99,12 +75,10 @@ public class SeatServiceImpl implements SeatService {
 
             if (isUpdate > 0) {
                 log.info("◆ 좌석 예약 성공 : [{}]", seatId);
-                List<SeatEntity> seatEntities = seatRepository.findByStoreEntity_StoreId(storeId);
-                ResponseSeat res = new ResponseSeats(seatEntities.stream().map(SeatResult::new).toList());
-                seatSessionManager.broadcast(new ObjectMapper().writeValueAsString(res));
+                seatSessionService.broadcastSeatList(storeId);
             } else {
                 log.info("◆ 좌석 예약 실패 : [{}]", seatId);
-                redisTemplate.opsForValue().setBit(RedisKey.getSeatKey(storeId), seatEntity.getSeatNumber(), false); // DB 적용 실패로 예약 비트맵 원복
+                seatRedisService.releaseSeat(storeId, seatEntity.getSeatNumber()); // DB 적용 실패로 예약 비트맵 원복
             }
 
             return new SeatResult(seatEntity);
@@ -112,7 +86,7 @@ public class SeatServiceImpl implements SeatService {
         } catch (Exception e) {
             log.error("", e);
             log.error("◆ 좌석 예약 실패 : {}", seatId);
-            redisTemplate.opsForValue().setBit(RedisKey.getSeatKey(storeId), seatEntity.getSeatNumber(), false); // DB 적용 실패로 예약 비트맵 원복
+            seatRedisService.releaseSeat(storeId, seatEntity.getSeatNumber()); // DB 적용 실패로 예약 비트맵 원복
             throw new SeatException(SeatErrorCode.RESERVED_SEAT_FAIL);
         }
 

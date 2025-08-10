@@ -22,8 +22,8 @@ public class SeatController {
     @PostMapping("/seat/{seatId}")
     public ResponseEntity<ResponseReserveSeat> seat(
             @PathVariable Long seatId,
-            @JwtPayload("userId") String userId,
-            @JwtPayload("storeId") String storeId
+            @JwtPayload("userId") Integer userId,
+            @JwtPayload("storeId") Integer storeId
     ) throws SeatException { // 시트 예약
         SeatResult seatResult = seatService.reserveSeat(Long.valueOf(userId), Long.valueOf(storeId) , seatId);
         return ResponseEntity.ok().body(new ResponseReserveSeat(seatResult));

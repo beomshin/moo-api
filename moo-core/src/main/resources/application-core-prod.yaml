@@ -8,8 +8,8 @@ spring:
         format_sql: false
   data:
     redis:
-      host: 125.180.87.49
-      port: 8637
+      host: 192.168.123.103
+      port: 6379
       password: redis@2025!
 
 datasource:
