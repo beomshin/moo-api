@@ -55,6 +55,14 @@ public class SeatEntity extends BaseEntity {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp expiredAt; // 좌석 이용 종료시간
 
+    @Column(name = "fixed_start_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Timestamp fixedStartAt; // 고정 좌석 이용 시작시간
+
+    @Column(name = "fixed_expired_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Timestamp fixedExpiredAt; // 고정 좌석 이용 종료시간
+
     @Column(name = "seat_type")
     @Convert(converter = SeatTypeConverter.class)
     private SeatType seatType; // 좌석 타입 (0: 일반석, 1: 고정석)

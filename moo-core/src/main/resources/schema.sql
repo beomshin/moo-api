@@ -56,6 +56,8 @@ CREATE TABLE seats (
                        seat_number INT,                                    -- 좌석 번호
                        start_at TIMESTAMP,                                 -- 시작시간
                        expired_at TIMESTAMP,                               -- 종료시간
+                       fixed_start_at TIMESTAMP,                           -- 고정 좌석 시작시간
+                       fixed_expired_at TIMESTAMP,                         -- 고정 좌석 종료시간
                        seat_type INT,                                      -- 좌석 타입
                        seat_status INT,                                    -- 좌석 상태
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- 등록일

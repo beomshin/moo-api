@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserLoginResponse generateLoginResult(Long userId, Long storeId) {
         // 1. jwt 토큰 생성
-        String token = jwtProvider.createToken(userId);
+        String token = jwtProvider.createToken(userId, storeId);
 
         // 3. 상점 정보 조회 및 url 생성
         StoreEntity store = storeRepository.findById(storeId).orElseThrow(()->new IllegalArgumentException("존재하지 않는 상점입니다."));

@@ -36,6 +36,7 @@ public class H2ManualDataInitializer {
 
         for (StoreEntity store : stores) {
             log.info("◆ 개발 환경 매장 레디스 bitMap 설정 : storeId {}, seatCount {}", store.getStoreId(), store.getSeatCount());
+            redisTemplate.delete(RedisKey.getSeatKey(store.getStoreId()));
             redisTemplate.opsForValue().setBit(RedisKey.getSeatKey(store.getStoreId()), store.getSeatCount(), false);
         }
     }

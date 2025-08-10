@@ -16,8 +16,8 @@ public class JwtProvider {
     private final long validityInMilliseconds = 1000 * 60 * 60; // 1시간
 
     // JWT 생성
-    public String createToken(Long userId){
-        Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
+    public String createToken(Long userId, Long storeId) {
+        Claims claims = Jwts.claims().setSubject("Moo");
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -25,18 +25,32 @@ public class JwtProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
+                .claim("userId",  userId)
+                .claim("storeId", storeId)
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     // JWT에서 유저 ID 추출
-    public String getUserId(String token){
+    public String getUserId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey.getBytes())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .getSubject();
+                .get("userId")
+                .toString();
+    }
+
+    // JWT에서 가맹점 ID 추출
+    public String getStoreId(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("storeId")
+                .toString();
     }
 
     // 유효성 검증
@@ -51,4 +65,21 @@ public class JwtProvider {
             return  false;
         }
     }
+
+    // JWT에서 유저 ID 추출
+    public Claims parseToken(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String resolveToken(String bearerToken) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
 }

@@ -1,7 +1,8 @@
 package com.kr.moo.interceptor;
 
+import com.kr.moo.util.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -12,20 +13,29 @@ import java.util.Map;
 
 @Slf4j
 @Component
-@Profile("!local")
-public class ProdJwtHandshakeInterceptor implements JwtHandshakeInterceptor {
+@RequiredArgsConstructor
+public class JwtHandshakeInterceptorImpl implements JwtHandshakeInterceptor {
+
+    private final JwtProvider jwtProvider;
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
             String authorization = servletRequest.getServletRequest().getHeader("Authorization");
-            log.info("Authorization: {}", authorization);
 
             if (authorization != null && authorization.startsWith("Bearer ")) {
-                String token = authorization.substring("Bearer ".length());
+                String token = jwtProvider.resolveToken(authorization);
 
                 try {
+                    boolean isValidToken = jwtProvider.validateToken(token);
+
+                    if (!isValidToken) {
+                        throw new Exception("Invalid token");
+                    }
+
+                    attributes.put("storeId", jwtProvider.getStoreId(token));
+                    attributes.put("userId", jwtProvider.getUserId(token));
 
                     return true;
                 } catch (Exception e) {
