@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
                     .userTelLast(req.getUserTel().substring(req.getUserTel().length() - 4))
                     .userJoinAt(Timestamp.valueOf(LocalDateTime.now()))
                     .userLoginType(UserLoginType.HOMEPAGE_CREATE)
-                    .userStatus(UserStatus.NORMAL_STATUS)
+                    .userStatus(UserStatus.NORMAL)
                     .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                     .build();
 
