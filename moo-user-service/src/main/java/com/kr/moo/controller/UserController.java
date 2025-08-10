@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+/**
+ * 사용자 관련 rest api 를 처리하는 컨트롤러
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor // 생성자 자동생성
@@ -24,8 +26,9 @@ public class UserController {
     private final UserService userService; // 회원관련 서비스
 
     /**
-     * 회원가입 api
-     * @param req 회원가입 정보
+     * 회원가입
+     * post /user/create
+     * @param req 클라이언트가 전송한 회원가입 요청 데이터
      * @return
      */
     @PostMapping("/create")
@@ -38,14 +41,14 @@ public class UserController {
         String code = null;
         String msg = null;
         
-        switch (result){
-            case SUCCESS ->{
+        switch (result) {
+            case SUCCESS -> {
                 code = "0000"; msg = "성공";
             }
-            case DUPLICATED_PHONE ->{
+            case DUPLICATED_PHONE -> {
                 code = "1001"; msg = "이미 사용 중인 휴대폰 번호입니다.";
             }
-            case FAILURE ->{
+            case FAILURE -> {
                 code = "9999"; msg = "실패";
             }
         }
@@ -60,29 +63,35 @@ public class UserController {
 
 
     /**
-     * 로그인 api
-     * @param req 로그인 정보
-     * @param response
+     * 로그인
+     * post /user/login
+     * @param req 클라이언트가 전송한 로그인 요청 데이터
      * @return
      */
     @PostMapping("/login") 
-    public ResponseEntity<?> login(@RequestBody UserLoginRequest req, HttpServletResponse response){
+    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest req){
 
         // 1. validation 체크 (로그인 정보 검증 )
         UserLoginResponse result = userService.validateLogin(req);
 
-        if(!result.isSuccess()){
-            // 로그인 실패 시 에러 응답
+        // 로그인 검증 실패 시
+        if (!result.isSuccess()){
+            // http 401 unauthorized 상태코드 + 실패응답
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(result.getResultMsg());
+                    .body(UserLoginResponse.builder()
+                            .resultCode(result.getResultCode())
+                            .resultMsg(result.getResultMsg())
+                            .userId(null)
+                            .token(null)
+                            .redirectUrl(null)
+                            .build());
         }
 
-        // 2. 성공이면 jwt 쿠키 생성 + 페이지 url 반환
-        String redirectUrl = userService.generateRedirectUrlAndSetCookie(result.getUserId(), req.getStoreId(), response);
+        // 2. 성공이면 jwt, redirecturl json 바디로 반환
+        UserLoginResponse responseDto = userService.generateLoginResult(result.getUserId(), req.getStoreId());
 
 
-        // 3. 리다이렉트 url 응답
-        return ResponseEntity.ok(redirectUrl);
+        // 3. http 200 ok 코드 + 성공응답
+        return ResponseEntity.ok(responseDto);
     }
-
 }

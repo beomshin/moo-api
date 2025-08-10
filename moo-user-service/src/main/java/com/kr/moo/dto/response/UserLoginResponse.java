@@ -12,8 +12,7 @@ public class UserLoginResponse {
     /**
      * 로그인 response dto
      */
-
-    private boolean success; // 아이디 없음, 비밀번호 불일치, 로그인 성공 ..
+    private boolean success;
 
     private String resultMsg;
 
@@ -21,4 +20,9 @@ public class UserLoginResponse {
 
     // 로그인 성공 시 userId 반환
     private Long userId;
+
+    private String token;
+
+    private String redirectUrl;
+
 }
