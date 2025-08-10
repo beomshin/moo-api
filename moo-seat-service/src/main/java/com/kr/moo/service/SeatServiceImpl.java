@@ -9,6 +9,7 @@ import com.kr.moo.persistence.entity.enums.SeatType;
 import com.kr.moo.persistence.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class SeatServiceImpl implements SeatService {
 
     private final SeatRepository seatRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public List<SeatResult> findSeatsByStoreId(Long storeId) {
@@ -48,6 +50,7 @@ public class SeatServiceImpl implements SeatService {
 
         log.info("◆ 좌석 예약 업데이트 [DB] : {} ~ {}, seatId {}, userId, {}",  startAt, expiredAt, seatId, userId);
         int isUpdate = seatRepository.updateReservedSeat(userId, startAt, expiredAt, SeatStatus.USE, seatId);
+        redisTemplate.opsForValue().set(String.valueOf(seatId), "1");
 
         if (isUpdate > 0) {
             log.info("◆ 좌석 예약 성공 : {}", seatId);
