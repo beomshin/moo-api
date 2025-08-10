@@ -1,5 +1,6 @@
 package com.kr.moo.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kr.moo.persistence.entity.common.BaseEntity;
 import com.kr.moo.persistence.entity.converter.UserLoginTypeConverter;
 import com.kr.moo.persistence.entity.converter.UserStatusConverter;
@@ -9,6 +10,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.sql.Timestamp;
 
 @Getter
 @SuperBuilder
@@ -45,7 +48,8 @@ public class UserEntity extends BaseEntity {
     private String userBirth; // 생년월일
 
     @Column(name = "user_join_at")
-    private String userJoinAt; // 최초 가입시간
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Timestamp userJoinAt; // 최초 가입시간
 
     @Column(name = "user_login_type")
     @Convert(converter = UserLoginTypeConverter.class)
