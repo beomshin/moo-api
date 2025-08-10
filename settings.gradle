@@ -4,3 +4,5 @@ include 'moo-app'
 include 'moo-core'
 include 'moo-user-service'
 include 'moo-admin'
+include 'moo-seat-service'
+

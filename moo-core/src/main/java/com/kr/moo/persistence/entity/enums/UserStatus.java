@@ -7,9 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserStatus {
 
-    NORMAL_STATUS(0), // 일반 상태
-    LEAVE_STATUS(1), // 탈퇴 상태
-    QUIT_STATUS(2), // 중지 상태
+    NORMAL(0), // 일반 상태
+    LEAVE(1), // 탈퇴 상태
+    QUIT(2), // 중지 상태
 
     ;
 

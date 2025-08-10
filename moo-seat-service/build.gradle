@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.kr.moo'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation project(":moo-core")
+}
+
+test {
+    useJUnitPlatform()
+}

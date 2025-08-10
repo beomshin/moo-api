@@ -55,6 +55,7 @@ project(':moo-app') {
     dependencies {
         implementation project(':moo-shared')
         implementation project(':moo-user-service')
+        implementation project(':moo-seat-service')
         implementation project(':moo-core')
     }
 }
