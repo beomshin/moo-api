@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 @DynamicInsert
 public class BaseEntity {
 
-    @Setter
     @Column(name = "created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp createdAt; // 등록일
