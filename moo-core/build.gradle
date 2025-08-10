@@ -18,6 +18,7 @@ dependencies {
     // 2025.07.27 mysql connector 추가
     implementation 'com.mysql:mysql-connector-j:8.3.0'
 
+    implementation project(':moo-shared')
 }
 
 test {
