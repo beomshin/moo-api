@@ -1,10 +1,9 @@
 package com.kr.moo.service;
 
-import com.kr.moo.dto.SeatDto;
-
-import java.util.List;
+import com.kr.moo.dto.SeatResult;
+import com.kr.moo.exception.SeatException;
 
 public interface SeatService {
 
-    List<SeatDto> findSeatsByStoreId(Long storeId);
+    SeatResult reserveSeat(Long userId, Long storeId, Long seatId) throws SeatException;
 }

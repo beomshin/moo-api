@@ -1,6 +1,5 @@
 package com.kr.moo.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kr.moo.persistence.entity.SeatEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,14 +10,16 @@ import java.sql.Timestamp;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeatDto {
+public class SeatResult {
+
+    /**
+     * seatService 결과 반환 Dto
+     */
 
     private Long seatId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp startAt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp expiredAt;
 
     private Integer seatNumber;
@@ -27,7 +28,7 @@ public class SeatDto {
 
     private Integer seatStatus;
 
-    public SeatDto(SeatEntity seatEntity) {
+    public SeatResult(SeatEntity seatEntity) {
         this.seatId = seatEntity.getSeatId();
         this.startAt = seatEntity.getStartAt();
         this.expiredAt = seatEntity.getExpiredAt();

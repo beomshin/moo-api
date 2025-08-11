@@ -6,7 +6,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create  # ★ 시작 시 항상 테이블 새로 생성
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -15,6 +15,11 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
+  data:
+    redis:
+      host: 192.168.123.103
+      port: 6379
+      password: redis@2025!
 
 datasource:
   instance1:

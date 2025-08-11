@@ -6,6 +6,11 @@ spring:
     properties:
       hibernate:
         format_sql: false
+  data:
+    redis:
+      host: 192.168.123.103
+      port: 6379
+      password: redis@2025!
 
 datasource:
   instance1:

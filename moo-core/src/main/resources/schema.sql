@@ -51,14 +51,18 @@ CREATE TABLE stores (
 CREATE TABLE seats (
                        seat_id BIGINT PRIMARY KEY AUTO_INCREMENT,          -- 좌석 아이디 (PK)
                        store_id BIGINT,                                    -- 매장 아이디 (FK)
-                       user_id BIGINT,                                     -- 유저 아이디 (FK)
+                       current_user_id BIGINT,                           -- 이용자 유저 아이디
+                       fixed_user_id BIGINT,                               -- 고정 좌석 구매자 아이디
                        seat_number INT,                                    -- 좌석 번호
                        start_at TIMESTAMP,                                 -- 시작시간
                        expired_at TIMESTAMP,                               -- 종료시간
+                       fixed_start_at TIMESTAMP,                           -- 고정 좌석 시작시간
+                       fixed_expired_at TIMESTAMP,                         -- 고정 좌석 종료시간
                        seat_type INT,                                      -- 좌석 타입
                        seat_status INT,                                    -- 좌석 상태
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- 등록일
                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- 수정일
                        CONSTRAINT fk_seats_store_id FOREIGN KEY (store_id) REFERENCES stores(store_id),
-                       CONSTRAINT fk_seats_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
+                       CONSTRAINT fk_seats_current_user_id FOREIGN KEY (current_user_id) REFERENCES users(user_id),
+                       CONSTRAINT fk_seats_fixed_user_id FOREIGN KEY (fixed_user_id) REFERENCES users(user_id)
 );

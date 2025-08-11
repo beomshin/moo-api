@@ -37,8 +37,12 @@ public class SeatEntity extends BaseEntity {
     private StoreEntity storeEntity; // 매장 아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity userEntity; // 유저 아이디
+    @JoinColumn(name = "current_user_id")
+    private UserEntity currentUserEntity; // 이용자 유저 아이디
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fixed_user_id")
+    private UserEntity fixedUserEntity; // 고정 좌석 구매자 아이디
 
     @Column(name = "seat_number")
     private Integer seatNumber; // 좌석 번호
@@ -50,6 +54,14 @@ public class SeatEntity extends BaseEntity {
     @Column(name = "expired_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp expiredAt; // 좌석 이용 종료시간
+
+    @Column(name = "fixed_start_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Timestamp fixedStartAt; // 고정 좌석 이용 시작시간
+
+    @Column(name = "fixed_expired_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Timestamp fixedExpiredAt; // 고정 좌석 이용 종료시간
 
     @Column(name = "seat_type")
     @Convert(converter = SeatTypeConverter.class)
