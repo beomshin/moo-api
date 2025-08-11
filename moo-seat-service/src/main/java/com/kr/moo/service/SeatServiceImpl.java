@@ -81,7 +81,7 @@ public class SeatServiceImpl implements SeatService {
                 seatRedisService.releaseSeat(storeId, seatEntity.getSeatNumber()); // DB 적용 실패로 예약 비트맵 원복
             }
 
-            return new SeatResult(seatEntity);
+            return new SeatResult(seatEntity.getSeatNumber(), expiredAt);
 
         } catch (Exception e) {
             log.error("", e);
