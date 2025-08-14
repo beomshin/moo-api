@@ -10,6 +10,7 @@ import com.kr.moo.persistence.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
@@ -24,10 +25,17 @@ public class SeatServiceImpl implements SeatService {
     private final SeatSessionService seatSessionService;
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public SeatResult reserveSeat(Long userId, Long storeId, Long seatId) throws SeatException {
         log.info("◆ 좌석 정보 조회 [DB] : [{}]", seatId);
         SeatEntity seatEntity = seatRepository.findById(seatId).orElseThrow(() -> new SeatException(SeatErrorCode.FIND_SEAT_FAIL));
+
+        int isSeatUseUser = seatRepository.countByCurrentUserEntity_UserId(userId);
+
+        if (isSeatUseUser > 0) {
+            log.info("◆ 이미 좌석 사용중인 유저 [DB] : isSeatUseUser [{}]", isSeatUseUser);
+            throw new SeatException(SeatErrorCode.USE_STATE_USER);
+        }
 
         Timestamp startAt = new Timestamp(System.currentTimeMillis());
         Timestamp expiredAt = new Timestamp(System.currentTimeMillis() + (3600 + 3));
@@ -90,5 +98,25 @@ public class SeatServiceImpl implements SeatService {
             throw new SeatException(SeatErrorCode.RESERVED_SEAT_FAIL);
         }
 
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public SeatResult checkOutSeat(Long userId, Long storeId, Long seatId) throws SeatException {
+        log.info("◆ 좌석 정보 조회 [DB] : [{}]", seatId);
+        SeatEntity seatEntity = seatRepository.findBySeatIdAndStoreEntity_StoreIdAndCurrentUserEntity_UserId(seatId, storeId, userId)
+                .orElseThrow(() -> new SeatException(SeatErrorCode.FIND_SEAT_FAIL));
+
+        int isUpdate = seatRepository.updateCheckOutSeat(SeatStatus.NORMAL, seatId);
+
+        if (isUpdate > 0) {
+            log.info("◆ 좌석 퇴실 성공 : [{}]", seatId);
+            seatRedisService.releaseSeat(storeId, seatEntity.getSeatNumber()); // 좌석 예약 해지
+            seatSessionService.broadcastSeatList(storeId);
+        } else {
+            log.info("◆ 좌석 퇴실 실패 : [{}]", seatId);
+        }
+
+        return new SeatResult();
     }
 }
