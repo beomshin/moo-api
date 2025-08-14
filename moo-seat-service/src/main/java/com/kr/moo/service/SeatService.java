@@ -6,4 +6,6 @@ import com.kr.moo.exception.SeatException;
 public interface SeatService {
 
     SeatResult reserveSeat(Long userId, Long storeId, Long seatId) throws SeatException;
+
+    SeatResult checkOutSeat(Long userId, Long storeId, Long seatId) throws SeatException;
 }
