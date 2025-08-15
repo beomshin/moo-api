@@ -1,6 +1,7 @@
-package com.kr.moo.service;
+package com.kr.moo.service.impl;
 
 import com.kr.moo.constants.RedisKey;
+import com.kr.moo.service.SeatRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisCallback;

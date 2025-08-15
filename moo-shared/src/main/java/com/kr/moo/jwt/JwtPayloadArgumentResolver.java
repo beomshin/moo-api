@@ -1,7 +1,10 @@
 package com.kr.moo.jwt;
 
+import com.kr.moo.exception.GlobalErrorCode;
+import com.kr.moo.exception.MooGlobalException;
 import com.kr.moo.util.JwtProvider;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,16 +30,20 @@ public class JwtPayloadArgumentResolver implements HandlerMethodArgumentResolver
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-        HttpServletRequest request= (HttpServletRequest) webRequest.getNativeRequest();
+        try {
+            HttpServletRequest request= (HttpServletRequest) webRequest.getNativeRequest();
 
-        String token = jwtProvider.resolveToken(request.getHeader("Authorization"));
-        if (token == null) return null;
+            String token = jwtProvider.resolveToken(request.getHeader("Authorization"));
+            if (token == null) return null;
 
-        Claims claims = jwtProvider.parseToken(token); // JWT 파싱
-        JwtPayload annotation = parameter.getParameterAnnotation(JwtPayload.class);
-        String key = annotation.value();
+            Claims claims = jwtProvider.parseToken(token); // JWT 파싱
+            JwtPayload annotation = parameter.getParameterAnnotation(JwtPayload.class);
+            String key = annotation.value();
 
-        return claims.get(key);
+            return claims.get(key);
+        } catch (Exception e) {
+            throw new MooGlobalException(GlobalErrorCode.JWT_TOKEN_ERROR);
+        }
     }
 
 }

@@ -36,4 +36,9 @@ public class SeatResult {
         this.seatType = seatEntity.getSeatType().getValue();
         this.seatStatus = seatEntity.getSeatStatus().getValue();
     }
+
+    public SeatResult(Integer seatNumber, Timestamp expiredAt) {
+        this.seatNumber = seatNumber;
+        this.expiredAt = expiredAt;
+    }
 }

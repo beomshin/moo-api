@@ -1,4 +1,4 @@
-package com.kr.moo.service;
+package com.kr.moo.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kr.moo.dto.SeatResult;
@@ -7,6 +7,7 @@ import com.kr.moo.dto.res.frame.ResponseSeat;
 import com.kr.moo.manger.SeatSessionManager;
 import com.kr.moo.persistence.entity.SeatEntity;
 import com.kr.moo.persistence.repository.SeatRepository;
+import com.kr.moo.service.SeatSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
