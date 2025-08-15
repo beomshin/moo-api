@@ -1,4 +1,4 @@
-package com.kr.moo.service;
+package com.kr.moo.service.impl;
 
 import com.kr.moo.dto.SeatDto;
 import com.kr.moo.dto.SeatResult;
@@ -8,6 +8,9 @@ import com.kr.moo.persistence.entity.SeatEntity;
 import com.kr.moo.persistence.entity.enums.SeatStatus;
 import com.kr.moo.persistence.entity.enums.SeatType;
 import com.kr.moo.persistence.repository.SeatRepository;
+import com.kr.moo.service.SeatRedisService;
+import com.kr.moo.service.SeatService;
+import com.kr.moo.service.SeatSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,8 @@ public class SeatServiceImpl implements SeatService {
 
         if (seatEntity.getSeatType() == SeatType.NORMAL) { // 일반 좌석
 
+            log.info("◆ 일반 좌석 : seatType [{}]", seatEntity.getSeatType());
+
             if (seatEntity.getSeatStatus() == SeatStatus.USE) {
                 log.info("◆ 이미 사용중인 좌석 [DB] : status [{}]", seatEntity.getSeatStatus());
                 throw new SeatException(SeatErrorCode.USE_SEAT_STATA);
@@ -59,7 +64,7 @@ public class SeatServiceImpl implements SeatService {
 
         } else if (seatEntity.getSeatType() == SeatType.FIX) { // 고정 좌석
 
-            log.info("◆ 고정 좌석 : type [{}]", seatEntity.getSeatType());
+            log.info("◆ 고정 좌석 : seatType [{}]", seatEntity.getSeatType());
 
             boolean isNotFixedUser = seatEntity.getFixedUserEntity() == null || seatEntity.getFixedUserEntity().getUserId() != seatDto.getUserId();
 

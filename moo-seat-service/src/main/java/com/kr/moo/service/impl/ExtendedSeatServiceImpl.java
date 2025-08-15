@@ -1,4 +1,4 @@
-package com.kr.moo.service;
+package com.kr.moo.service.impl;
 
 import com.kr.moo.dto.SeatDto;
 import com.kr.moo.dto.SeatResult;
@@ -6,6 +6,8 @@ import com.kr.moo.exception.SeatErrorCode;
 import com.kr.moo.exception.SeatException;
 import com.kr.moo.persistence.entity.SeatEntity;
 import com.kr.moo.persistence.repository.SeatRepository;
+import com.kr.moo.service.ExtendedSeatService;
+import com.kr.moo.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
