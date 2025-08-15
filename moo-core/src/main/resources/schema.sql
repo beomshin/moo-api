@@ -5,6 +5,7 @@ SET REFERENTIAL_INTEGRITY FALSE;
 DROP TABLE IF EXISTS seats;
 DROP TABLE IF EXISTS stores;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS seats_history;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
@@ -65,4 +66,17 @@ CREATE TABLE seats (
                        CONSTRAINT fk_seats_store_id FOREIGN KEY (store_id) REFERENCES stores(store_id),
                        CONSTRAINT fk_seats_current_user_id FOREIGN KEY (current_user_id) REFERENCES users(user_id),
                        CONSTRAINT fk_seats_fixed_user_id FOREIGN KEY (fixed_user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE seats_history (
+                       seat_history_id	BIGINT PRIMARY KEY AUTO_INCREMENT,   -- 좌석 히스토리 아이디 (PK)
+                       seat_id BIGINT,                                      -- 좌석 아이디
+                       store_id BIGINT,                                    -- 매장 아이디
+                       current_user_id BIGINT,                              -- 이용자 유저 아이디
+                       seat_number INT,                                    -- 좌석 번호
+                       start_at TIMESTAMP,                                 -- 시작시간
+                       expired_at TIMESTAMP,                               -- 종료시간
+                       seat_type INT,                                      -- 좌석 타입
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- 등록일
+                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    -- 수정일
 );
