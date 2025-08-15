@@ -1,7 +1,9 @@
 package com.kr.moo.controller;
 
+import com.kr.moo.dto.SeatDto;
 import com.kr.moo.dto.SeatResult;
 import com.kr.moo.dto.res.ResponseReserveSeat;
+import com.kr.moo.dto.res.ResponseSwitchSeat;
 import com.kr.moo.dto.res.frame.AbstractResponseSeat;
 import com.kr.moo.dto.res.frame.ResponseSeat;
 import com.kr.moo.jwt.JwtPayload;
@@ -27,7 +29,14 @@ public class SeatController {
             @JwtPayload("userId") Integer userId,
             @JwtPayload("storeId") Integer storeId
     ) throws Exception { // 좌석 예약
-        SeatResult seatResult = seatService.reserveSeat(Long.valueOf(userId), Long.valueOf(storeId) , seatId);
+        SeatDto seatDto = SeatDto.builder()
+                .seatId(seatId)
+                .storeId(Long.valueOf(storeId))
+                .userId(Long.valueOf(userId))
+                .isMessageSent(true)
+                .build();
+
+        SeatResult seatResult = seatService.reserveSeat(seatDto);
         return ResponseEntity.ok().body(new ResponseReserveSeat(seatResult));
     }
 
@@ -37,9 +46,15 @@ public class SeatController {
             @JwtPayload("userId") Integer userId,
             @JwtPayload("storeId") Integer storeId
     ) throws Exception { // 좌석 퇴실
-        SeatResult seatResult = seatService.checkOutSeat(Long.valueOf(userId), Long.valueOf(storeId) , seatId);
-        ResponseSeat responseSeat = new AbstractResponseSeat();
-        return ResponseEntity.ok().body(responseSeat);
+        SeatDto seatDto = SeatDto.builder()
+                .seatId(seatId)
+                .storeId(Long.valueOf(storeId))
+                .userId(Long.valueOf(userId))
+                .isMessageSent(true)
+                .build();
+
+        seatService.checkOutSeat(seatDto);
+        return ResponseEntity.ok().body(new AbstractResponseSeat());
     }
 
     @PostMapping("/switch/{seatId}")
@@ -48,7 +63,14 @@ public class SeatController {
             @JwtPayload("userId") Integer userId,
             @JwtPayload("storeId") Integer storeId
     ) throws Exception { // 좌석 예약
-        SeatResult seatResult = extendedSeatService.switchSeat(Long.valueOf(userId), Long.valueOf(storeId) , seatId);
-        return ResponseEntity.ok().body(new ResponseReserveSeat(seatResult));
+        SeatDto seatDto = SeatDto.builder()
+                .seatId(seatId)
+                .storeId(Long.valueOf(storeId))
+                .userId(Long.valueOf(userId))
+                .isMessageSent(true)
+                .build();
+
+        SeatResult seatResult = extendedSeatService.switchSeat(seatDto);
+        return ResponseEntity.ok().body(new ResponseSwitchSeat(seatResult));
     }
 }

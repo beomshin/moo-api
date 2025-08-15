@@ -1,5 +1,6 @@
 package com.kr.moo.aop;
 
+import com.kr.moo.exception.MooGlobalException;
 import com.kr.moo.exception.SeatException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,7 +88,17 @@ public class ExceptionController {
         return ResponseEntity.ok().body(Map.of(
                 "resultCode", "9999",
                 "resultMsg", "IO 오류"
-        ));    }
+        ));
+    }
+
+    @ExceptionHandler(value = MooGlobalException.class)
+    public ResponseEntity<?> handle(MooGlobalException e) {
+        log.error("■ 응답 오류 [MooGlobalException]", e);
+        return ResponseEntity.ok().body(Map.of(
+                "resultCode", e.getResultCode(),
+                "resultMsg", e.getResultMsg()
+        ));
+    }
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<?> handle(Exception e) {
@@ -95,7 +106,9 @@ public class ExceptionController {
         return ResponseEntity.ok().body(Map.of(
                 "resultCode", "9999",
                 "resultMsg", "미지정오류"
-        ));    }
+        ));
+    }
+
 
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<?> handle(RuntimeException e) { // 런타임 오류 글로벌 처리
@@ -103,7 +116,8 @@ public class ExceptionController {
         return ResponseEntity.ok().body(Map.of(
                 "resultCode", "9999",
                 "resultMsg", "미지정오류"
-        ));    }
+        ));
+    }
 
 
 }
