@@ -38,8 +38,14 @@ public class SeatSessionServiceImpl implements SeatSessionService {
 
     @Async
     @Override
-    public void broadcastSeatList(Long storeId) {
+    public synchronized void broadcastSeatList(Long storeId) {
         try {
+
+            /**
+             * 상태 변경 순서를 위해 synchronized 사용
+             * 다중화 서버 경우는 큐 시스템 도입필요
+             */
+
             log.info("◆ 좌석 정보 리스트 브로드 캐스트 비동기 발송");
             List<SeatEntity> seatEntities = seatRepository.findByStoreEntity_StoreId(storeId);
             List<SeatResult> seats = seatEntities.stream().map(SeatResult::new).toList();

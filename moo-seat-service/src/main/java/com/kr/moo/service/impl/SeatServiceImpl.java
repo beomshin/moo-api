@@ -8,13 +8,13 @@ import com.kr.moo.persistence.entity.SeatEntity;
 import com.kr.moo.persistence.entity.SeatHistoryEntity;
 import com.kr.moo.persistence.entity.enums.SeatStatus;
 import com.kr.moo.persistence.entity.enums.SeatType;
-import com.kr.moo.persistence.repository.SeatHistoryRepository;
 import com.kr.moo.persistence.repository.SeatRepository;
 import com.kr.moo.service.SeatRedisService;
 import com.kr.moo.service.SeatService;
 import com.kr.moo.service.SeatSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +27,9 @@ import java.sql.Timestamp;
 public class SeatServiceImpl implements SeatService {
 
     private final SeatRepository seatRepository;
-    private final SeatHistoryRepository seatHistoryRepository;
     private final SeatRedisService seatRedisService;
     private final SeatSessionService seatSessionService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -118,27 +118,26 @@ public class SeatServiceImpl implements SeatService {
         SeatEntity seatEntity = seatRepository.findBySeatIdAndStoreEntity_StoreIdAndCurrentUserEntity_UserId(seatDto.getSeatId(), seatDto.getStoreId(), seatDto.getUserId())
                 .orElseThrow(() -> new SeatException(SeatErrorCode.FIND_SEAT_FAIL));
 
-        SeatHistoryEntity historyEntity = SeatHistoryEntity.builder()
-                .seatId(seatEntity.getSeatId())
-                .storeId(seatEntity.getStoreEntity().getStoreId())
-                .currentUserId(seatEntity.getCurrentUserEntity().getUserId())
-                .seatNumber(seatEntity.getSeatNumber())
-                .startAt(seatEntity.getStartAt())
-                .expiredAt(new Timestamp(System.currentTimeMillis()))
-                .seatType(seatEntity.getSeatType())
-                .build();
-
         int isUpdate = seatRepository.updateCheckOutSeat(SeatStatus.NORMAL, seatDto.getSeatId());
-
-        seatHistoryRepository.save(historyEntity); // ToDo 추후 비동기 처리 필요
 
         if (isUpdate > 0) {
             log.info("◆ 좌석 퇴실 성공 : [{}]", seatDto.getSeatId());
             seatRedisService.releaseSeat(seatDto.getStoreId(), seatEntity.getSeatNumber()); // 좌석 예약 해지
 
-            if (seatDto.isMessageSent()) {
+            if (seatDto.isMessageSent()) { // 웹 소켓 세션 리스트에 상태 전송
                 seatSessionService.broadcastSeatList(seatDto.getStoreId());
             }
+
+            log.info("◆ 좌석 히스토리 저장 이벤트 발행");
+            applicationEventPublisher.publishEvent(SeatHistoryEntity.builder()
+                    .seatId(seatEntity.getSeatId())
+                    .storeId(seatEntity.getStoreEntity().getStoreId())
+                    .currentUserId(seatEntity.getCurrentUserEntity().getUserId())
+                    .seatNumber(seatEntity.getSeatNumber())
+                    .startAt(seatEntity.getStartAt())
+                    .expiredAt(new Timestamp(System.currentTimeMillis()))
+                    .seatType(seatEntity.getSeatType())
+                    .build());
 
         } else {
             log.info("◆ 좌석 퇴실 실패 : [{}]", seatDto.getSeatId());

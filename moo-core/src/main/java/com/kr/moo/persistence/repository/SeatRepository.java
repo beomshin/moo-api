@@ -32,7 +32,7 @@ public interface SeatRepository extends JpaRepository<SeatEntity, Long> {
     """)
     int updateReservedSeat(@Param("currentUserId") Long currentUserId, @Param("startAt") Timestamp startAt, @Param("expiredAt") Timestamp expiredAt, @Param("seatStatus") SeatStatus seatStatus, @Param("seatId") Long seatId);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying
     @Query("""
         UPDATE seats s
         SET s.currentUserEntity.userId = null,
