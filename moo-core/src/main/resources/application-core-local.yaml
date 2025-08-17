@@ -17,8 +17,8 @@ spring:
       data-locations: classpath:data.sql
   data:
     redis:
-      host: 192.168.123.103
-      port: 6379
+      host: 125.180.87.49
+      port: 8637
       password: redis@2025!
 
 datasource:
