@@ -12,6 +12,14 @@ spring:
       port: 8637
       password: redis@2025!
 
+    mongodb:
+      host: 125.180.87.49
+      port: 5717
+      database: moo
+      username: moo
+      password: moo@2025!
+
+
 datasource:
   instance1:
     jdbc-url: jdbc:mysql://125.180.87.49:5221/moo_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
