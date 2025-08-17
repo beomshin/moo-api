@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
                 .resultCode(UserLoginResultType.SUCCESS.getResultCode())
                 .resultMsg(UserLoginResultType.SUCCESS.getResultMsg())
                 .token(token)
-                .redirectUrl("http://localhost"+redirectUrl)
+                .redirectUrl("http://localhost:5173"+redirectUrl)
                 .build();
     }
 }

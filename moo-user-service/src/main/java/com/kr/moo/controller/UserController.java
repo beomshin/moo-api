@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  * 사용자 관련 rest api 를 처리하는 컨트롤러
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor // 생성자 자동생성
 @RequestMapping(value = "/user") // /user로 시작하는 url처리
+@CrossOrigin(origins = {"http://localhost:5173"}, allowedHeaders = "*") // CORS 설정 추가
 public class UserController {
 
     private final UserService userService; // 회원관련 서비스
