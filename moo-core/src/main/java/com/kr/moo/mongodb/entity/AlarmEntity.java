@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Builder
+@ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Document(collection = "alarm")
@@ -28,5 +29,8 @@ public class AlarmEntity {
 
     @Field("alarm_type")
     private AlarmType alarmType;
+
+    @Field("createAt")
+    private String createAt;
 
 }

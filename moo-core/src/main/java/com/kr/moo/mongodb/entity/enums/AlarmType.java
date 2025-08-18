@@ -7,13 +7,16 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AlarmType {
 
-    COUPON(0), // 일반 상태
-    PAY_OR_EXTENSION(1), // 구매/연장
-    EXPIRED(2), // 종료 예정
-    FINISHED_OR_OVER_EXTENSION(3), // 종료/초과
-    ENTER_OR_CHECKOUT(4), // 입실/퇴실
-    SYSTEM(5), // 시스템
-    NOTICE(6), // 공지사항
+    COUPON(0), // 쿠폰 구매
+    PAY(1), // 이용권 구매
+    EXTENSION(2), // 이용권 연장
+    EXPIRED(3), // 종료 예정
+    FINISHED(4), // 좌석 종료
+    OVER_EXTENSION(5), // 좌석 이용 초과
+    ENTER(6), // 입실
+    CHECKOUT(7), // 퇴실
+    SYSTEM(8), // 시스템
+    NOTICE(9), // 공지사항
 
     ;
 

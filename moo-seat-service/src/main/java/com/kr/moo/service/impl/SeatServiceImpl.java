@@ -1,9 +1,12 @@
 package com.kr.moo.service.impl;
 
+import com.kr.moo.dto.ExternalAlarmDto;
 import com.kr.moo.dto.SeatDto;
 import com.kr.moo.dto.SeatResult;
 import com.kr.moo.exception.SeatErrorCode;
 import com.kr.moo.exception.SeatException;
+import com.kr.moo.external.ExternalAlarm;
+import com.kr.moo.mongodb.entity.enums.AlarmType;
 import com.kr.moo.persistence.entity.SeatEntity;
 import com.kr.moo.persistence.entity.SeatHistoryEntity;
 import com.kr.moo.persistence.entity.enums.SeatStatus;
@@ -29,6 +32,7 @@ public class SeatServiceImpl implements SeatService {
     private final SeatRepository seatRepository;
     private final SeatRedisService seatRedisService;
     private final SeatSessionService seatSessionService;
+    private final ExternalAlarm externalAlarm;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
@@ -94,6 +98,7 @@ public class SeatServiceImpl implements SeatService {
                 log.info("◆ 좌석 예약 성공 : [{}]", seatDto.getSeatId());
                 if (seatDto.isMessageSent()) {
                     seatSessionService.broadcastSeatList(seatDto.getStoreId());
+                    externalAlarm.sendAlarm(new ExternalAlarmDto(seatDto.getUserId(), seatDto.getStoreId(), AlarmType.ENTER));
                 }
             } else {
                 log.info("◆ 좌석 예약 실패 : [{}]", seatDto.getSeatId());
@@ -126,6 +131,7 @@ public class SeatServiceImpl implements SeatService {
 
             if (seatDto.isMessageSent()) { // 웹 소켓 세션 리스트에 상태 전송
                 seatSessionService.broadcastSeatList(seatDto.getStoreId());
+                externalAlarm.sendAlarm(new ExternalAlarmDto(seatDto.getUserId(), seatDto.getStoreId(), AlarmType.CHECKOUT));
             }
 
             log.info("◆ 좌석 히스토리 저장 이벤트 발행");

@@ -6,4 +6,8 @@ public class RedisKey {
         return "seat:status:" + storeId;
     }
 
+    public static String getStoreKey(Long storeId) {
+        return "moo:store:" + storeId;
+    }
+
 }

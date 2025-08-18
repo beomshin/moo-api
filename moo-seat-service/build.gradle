@@ -13,6 +13,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation project(":moo-core")
     implementation project(":moo-shared")
+    implementation project(":moo-alarm-service")
 }
 
 test {
